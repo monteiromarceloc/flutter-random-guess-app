@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:segment_display/segment_display.dart';
+
+import 'display_container.dart';
+import 'form_row.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,22 +39,27 @@ class _HomePageState extends State<HomePage> {
   int _randomNumber = 0;
   String _textToDisplay = '';
   bool _showPlayAgainButton = false;
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   final requestHandler = new RequestHandler();
   final myController = TextEditingController();
 
   Future<void> _fetchRandomNumber() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       int value = await requestHandler._getNum();
       setState(() {
         _randomNumber = value;
+        _isLoading = false;
       });
     } catch (error) {
       setState(() {
-        _randomNumber = error.StatusCode;
+        _inputText = error.StatusCode.toString();
         _textToDisplay = error.ErrorMessage;
         _showPlayAgainButton = true;
+        _isLoading = false;
       });
     }
   }
@@ -76,94 +83,41 @@ class _HomePageState extends State<HomePage> {
           title: Text(widget.title),
         ),
         body: Container(
-            margin: EdgeInsets.all(20.0),
-            child: Column(children: <Widget>[
-              Expanded(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                    Container(
-                        margin: EdgeInsets.only(bottom: 20.0),
-                        child: Text(
-                          _textToDisplay,
-                          style: Theme.of(context).textTheme.headline6,
-                        )),
-                    SevenSegmentDisplay(
-                      value: _inputText,
-                      size: 10.0,
-                      characterSpacing: 4.0,
-                      backgroundColor: Colors.transparent,
-                      segmentStyle: HexSegmentStyle(
-                        enabledColor: Colors.red,
-                        disabledColor: Colors.grey.withOpacity(0.15),
-                      ),
-                    ),
-                    Visibility(
-                        visible: _showPlayAgainButton,
-                        child: ButtonTheme(
-                            minWidth: 120.0,
-                            child: FlatButton(
-                              onPressed: () {
-                                _fetchRandomNumber();
-                                myController.clear();
-                                setState(() {
-                                  _inputText = '0';
-                                  _textToDisplay = '';
-                                  _showPlayAgainButton = false;
-                                  _isLoading = true;
-                                });
-                              },
-                              child: Text(
-                                "Nova Partida",
-                              ),
-                            ))),
-                  ])),
-              // Text(_randomNumber.toString()),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: myController,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 2.0)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 2.0)),
-                        hintText: 'Digite o palpite',
-                      ),
-                      maxLength: 3,
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                  ButtonTheme(
-                      minWidth: 120.0,
-                      child: FlatButton(
-                        onPressed: () {
-                          int inputNumber = int.parse(myController.text);
-                          bool didHit = inputNumber == _randomNumber;
-                          print(inputNumber.toString() +
-                              " == " +
-                              _randomNumber.toString());
-                          setState(() {
-                            _inputText = myController.text;
-                            _textToDisplay = didHit
-                                ? "Acertou!"
-                                : inputNumber < _randomNumber
-                                    ? "É maior"
-                                    : "É menor";
-                            _showPlayAgainButton = didHit;
-                          });
-                          myController.clear();
-                        },
-                        child: Text(
-                          "Enviar",
-                        ),
-                      ))
-                ],
-              ),
-            ])));
+          margin: EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              DisplayContainer(
+                  label: _textToDisplay,
+                  displayText: _inputText,
+                  showButton: _showPlayAgainButton,
+                  onRestart: () {
+                    setState(() {
+                      _inputText = '0';
+                      _textToDisplay = '';
+                      _showPlayAgainButton = false;
+                    });
+                    _fetchRandomNumber();
+                  }),
+              FormRow(
+                myController: myController,
+                disableButton: _showPlayAgainButton,
+                onSubmit: () {
+                  int inputNumber = int.parse(myController.text);
+                  bool didHit = inputNumber == _randomNumber;
+                  setState(() {
+                    _inputText = myController.text;
+                    _textToDisplay = didHit
+                        ? "Acertou!"
+                        : inputNumber < _randomNumber ? "É maior" : "É menor";
+                    _showPlayAgainButton = didHit;
+                  });
+                  myController.clear();
+                },
+              )
+            ],
+          ),
+        ));
   }
 }
 
