@@ -75,43 +75,50 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                _textToDisplay,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              SevenSegmentDisplay(
-                value: _inputText,
-                size: 10.0,
-                characterSpacing: 4.0,
-                backgroundColor: Colors.transparent,
-                segmentStyle: HexSegmentStyle(
-                  enabledColor: Colors.red,
-                  disabledColor: Colors.grey.withOpacity(0.15),
-                ),
-              ),
-              Visibility(
-                  visible: _showPlayAgainButton,
-                  child: ButtonTheme(
-                      minWidth: 120.0,
-                      child: FlatButton(
-                        onPressed: () {
-                          _fetchRandomNumber();
-                          myController.clear();
-                          setState(() {
-                            _inputText = '0';
-                            _textToDisplay = '';
-                            _showPlayAgainButton = false;
-                            _isLoading = true;
-                          });
-                        },
+        body: Container(
+            margin: EdgeInsets.all(20.0),
+            child: Column(children: <Widget>[
+              Expanded(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.only(bottom: 20.0),
                         child: Text(
-                          "Nova Partida",
-                        ),
-                      ))),
+                          _textToDisplay,
+                          style: Theme.of(context).textTheme.headline6,
+                        )),
+                    SevenSegmentDisplay(
+                      value: _inputText,
+                      size: 10.0,
+                      characterSpacing: 4.0,
+                      backgroundColor: Colors.transparent,
+                      segmentStyle: HexSegmentStyle(
+                        enabledColor: Colors.red,
+                        disabledColor: Colors.grey.withOpacity(0.15),
+                      ),
+                    ),
+                    Visibility(
+                        visible: _showPlayAgainButton,
+                        child: ButtonTheme(
+                            minWidth: 120.0,
+                            child: FlatButton(
+                              onPressed: () {
+                                _fetchRandomNumber();
+                                myController.clear();
+                                setState(() {
+                                  _inputText = '0';
+                                  _textToDisplay = '';
+                                  _showPlayAgainButton = false;
+                                  _isLoading = true;
+                                });
+                              },
+                              child: Text(
+                                "Nova Partida",
+                              ),
+                            ))),
+                  ])),
+              // Text(_randomNumber.toString()),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -156,15 +163,7 @@ class _HomePageState extends State<HomePage> {
                       ))
                 ],
               ),
-              Text(_randomNumber.toString()),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _fetchRandomNumber,
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        ));
+            ])));
   }
 }
 
