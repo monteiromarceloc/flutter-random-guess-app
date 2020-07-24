@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:segment_display/segment_display.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,7 +30,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _inputNumber = 0;
-  int _randomNumber;
+  int _randomNumber = 0;
+  String _textToDisplay = '';
   final requestHandler = new RequestHandler();
 
   Future<void> _fetchRandomNumber() async {
@@ -39,7 +41,10 @@ class _HomePageState extends State<HomePage> {
         _randomNumber = value;
       });
     } catch (error) {
-      print(error.toString());
+      setState(() {
+        _randomNumber = error.StatusCode;
+        _textToDisplay = error.ErrorMessage;
+      });
     }
   }
 
@@ -53,12 +58,16 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                _randomNumber != null ? '$_randomNumber' : "0",
-                style: Theme.of(context).textTheme.headline4,
+              Text(_textToDisplay),
+              SevenSegmentDisplay(
+                value: _randomNumber.toString(),
+                size: 10.0,
+                characterSpacing: 4.0,
+                backgroundColor: Colors.transparent,
+                segmentStyle: HexSegmentStyle(
+                  enabledColor: Colors.red,
+                  disabledColor: Colors.grey.withOpacity(0.15),
+                ),
               ),
             ],
           ),
@@ -79,7 +88,10 @@ class RequestHandler {
     final body = jsonDecode(response.body);
 
     if (body['StatusCode'] != null || body['value'] == null) {
-      throw new Exception(body);
+      throw new CustomException(
+        StatusCode: body['StatusCode'],
+        ErrorMessage: body['Error'],
+      );
     }
 
     return body['value'];
@@ -87,6 +99,7 @@ class RequestHandler {
 }
 
 class CustomException implements Exception {
-  CustomException(this.body);
-  final body;
+  CustomException({@required this.StatusCode, @required this.ErrorMessage});
+  int StatusCode;
+  String ErrorMessage;
 }
