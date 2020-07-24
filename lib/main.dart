@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:segment_display/segment_display.dart';
@@ -10,6 +11,9 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return MaterialApp(
       title: 'Qual é o número?',
       theme: ThemeData(
@@ -29,10 +33,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _inputNumber = 0;
+  String _inputText = '0';
   int _randomNumber = 0;
   String _textToDisplay = '';
+  bool _showPlayAgainButton = false;
+  bool _isLoading = true;
+
   final requestHandler = new RequestHandler();
+  final myController = TextEditingController();
 
   Future<void> _fetchRandomNumber() async {
     try {
@@ -44,8 +52,21 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _randomNumber = error.StatusCode;
         _textToDisplay = error.ErrorMessage;
+        _showPlayAgainButton = true;
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRandomNumber();
+  }
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,9 +79,12 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(_textToDisplay),
+              Text(
+                _textToDisplay,
+                style: Theme.of(context).textTheme.headline6,
+              ),
               SevenSegmentDisplay(
-                value: _randomNumber.toString(),
+                value: _inputText,
                 size: 10.0,
                 characterSpacing: 4.0,
                 backgroundColor: Colors.transparent,
@@ -69,6 +93,70 @@ class _HomePageState extends State<HomePage> {
                   disabledColor: Colors.grey.withOpacity(0.15),
                 ),
               ),
+              Visibility(
+                  visible: _showPlayAgainButton,
+                  child: ButtonTheme(
+                      minWidth: 120.0,
+                      child: FlatButton(
+                        onPressed: () {
+                          _fetchRandomNumber();
+                          myController.clear();
+                          setState(() {
+                            _inputText = '0';
+                            _textToDisplay = '';
+                            _showPlayAgainButton = false;
+                            _isLoading = true;
+                          });
+                        },
+                        child: Text(
+                          "Nova Partida",
+                        ),
+                      ))),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: myController,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 2.0)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0)),
+                        hintText: 'Digite o palpite',
+                      ),
+                      maxLength: 3,
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  ButtonTheme(
+                      minWidth: 120.0,
+                      child: FlatButton(
+                        onPressed: () {
+                          int inputNumber = int.parse(myController.text);
+                          bool didHit = inputNumber == _randomNumber;
+                          print(inputNumber.toString() +
+                              " == " +
+                              _randomNumber.toString());
+                          setState(() {
+                            _inputText = myController.text;
+                            _textToDisplay = didHit
+                                ? "Acertou!"
+                                : inputNumber < _randomNumber
+                                    ? "É maior"
+                                    : "É menor";
+                            _showPlayAgainButton = didHit;
+                          });
+                          myController.clear();
+                        },
+                        child: Text(
+                          "Enviar",
+                        ),
+                      ))
+                ],
+              ),
+              Text(_randomNumber.toString()),
             ],
           ),
         ),
@@ -86,6 +174,7 @@ class RequestHandler {
         'https://us-central1-ss-devops.cloudfunctions.net/rand?min=1&max=300';
     final response = await http.get(url);
     final body = jsonDecode(response.body);
+    print(body.toString());
 
     if (body['StatusCode'] != null || body['value'] == null) {
       throw new CustomException(
@@ -93,7 +182,6 @@ class RequestHandler {
         ErrorMessage: body['Error'],
       );
     }
-
     return body['value'];
   }
 }
