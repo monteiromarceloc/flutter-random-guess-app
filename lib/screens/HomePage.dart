@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_random_guess_app/components/DisplayContainer.dart';
-import 'package:flutter_random_guess_app/components/FormRow.dart';
 import 'package:flutter_random_guess_app/repositories/RandomNumberRepository.dart';
 import 'package:flutter_random_guess_app/models/NumberResponse.dart';
 import 'package:flutter_random_guess_app/models/CustomException.dart';
+import 'package:flutter_random_guess_app/components/DisplayContainer.dart';
+import 'package:flutter_random_guess_app/components/FormRow.dart';
+import 'package:flutter_random_guess_app/components/LoadingComponent.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -18,8 +19,7 @@ class _HomePageState extends State<HomePage> {
   int _randomNumber = 0;
   String _textToDisplay = '';
   bool _showPlayAgainButton = false;
-  bool _isLoading =
-      false; // TODO: use Loading to disable button and show spinner
+  bool _isLoading = true;
 
   final myController = TextEditingController();
   final randomNumberRepository = new RandomNumberRepository();
@@ -70,21 +70,23 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              DisplayContainer(
-                  label: _textToDisplay,
-                  displayText: _inputText,
-                  showButton: _showPlayAgainButton,
-                  onRestart: () {
-                    setState(() {
-                      _inputText = '0';
-                      _textToDisplay = '';
-                      _showPlayAgainButton = false;
-                    });
-                    _fetchRandomNumber();
-                  }),
+              _isLoading
+                  ? LoadingComponent()
+                  : DisplayContainer(
+                      label: _textToDisplay,
+                      displayText: _inputText,
+                      showButton: _showPlayAgainButton,
+                      onRestart: () {
+                        setState(() {
+                          _inputText = '0';
+                          _textToDisplay = '';
+                          _showPlayAgainButton = false;
+                        });
+                        _fetchRandomNumber();
+                      }),
               FormRow(
                 myController: myController,
-                disableButton: _showPlayAgainButton,
+                disableButton: _showPlayAgainButton || _isLoading,
                 onSubmit: () {
                   int inputNumber = int.parse(myController.text);
                   bool didHit = inputNumber == _randomNumber;

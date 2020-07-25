@@ -8,6 +8,7 @@ class RandomNumberRepository {
 
   Future<NumberResponse> getValue() async {
     final response = await _provider.get('/rand?min=1&max=300');
+    print(response.toString());
     return NumberResponse.fromJson(response);
   }
 }
