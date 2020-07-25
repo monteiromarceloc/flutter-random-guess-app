@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-import '../components/DisplayContainer.dart';
-import '../components/FormRow.dart';
+import 'package:flutter_random_guess_app/components/DisplayContainer.dart';
+import 'package:flutter_random_guess_app/components/FormRow.dart';
+import 'package:flutter_random_guess_app/repositories/RandomNumberRepository.dart';
+import 'package:flutter_random_guess_app/models/NumberResponse.dart';
+import 'package:flutter_random_guess_app/models/CustomException.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -20,19 +21,20 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading =
       false; // TODO: use Loading to disable button and show spinner
 
-  final requestHandler = new RequestHandler();
   final myController = TextEditingController();
+  final randomNumberRepository = new RandomNumberRepository();
 
   Future<void> _fetchRandomNumber() async {
     setState(() {
       _isLoading = true;
     });
     try {
-      int value = await requestHandler._getNum();
+      NumberResponse res = await randomNumberRepository.getValue();
+      int value = res.value;
       setState(() {
         _randomNumber = value;
       });
-    } catch (error) {
+    } on CustomException catch (error) {
       setState(() {
         _inputText = error.StatusCode.toString();
         _textToDisplay = error.ErrorMessage;
@@ -100,28 +102,4 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
-}
-
-class RequestHandler {
-  Future<int> _getNum() async {
-    final url =
-        'https://us-central1-ss-devops.cloudfunctions.net/rand?min=1&max=300';
-    final response = await http.get(url);
-    final body = jsonDecode(response.body);
-    print(body.toString());
-
-    if (body['StatusCode'] != null || body['value'] == null) {
-      throw new CustomException(
-        StatusCode: body['StatusCode'],
-        ErrorMessage: body['Error'],
-      );
-    }
-    return body['value'];
-  }
-}
-
-class CustomException implements Exception {
-  CustomException({@required this.StatusCode, @required this.ErrorMessage});
-  int StatusCode;
-  String ErrorMessage;
 }
