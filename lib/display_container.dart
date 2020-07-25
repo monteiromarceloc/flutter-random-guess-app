@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_random_guess_app/custom_segment_display.dart';
 import 'custom_button.dart';
-import 'package:segment_display/segment_display.dart';
 
 class DisplayContainer extends StatelessWidget {
+  String label;
+  String displayText;
+  bool showButton;
+  final Function onRestart;
+
   DisplayContainer(
       {@required this.label,
       @required this.displayText,
       @required this.showButton,
       @required this.onRestart});
-
-  String label;
-  String displayText;
-  bool showButton;
-  final Function onRestart;
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +26,7 @@ class DisplayContainer extends StatelessWidget {
                 label,
                 style: Theme.of(context).textTheme.headline6,
               )),
-          SevenSegmentDisplay(
-            value: displayText,
-            size: 10.0,
-            characterSpacing: 4.0,
-            backgroundColor: Colors.transparent,
-            segmentStyle: HexSegmentStyle(
-              enabledColor: Colors.red,
-              disabledColor: Colors.grey.withOpacity(0.15),
-            ),
-          ),
+          CustomSegmentDisplay(displayValue: int.parse(displayText)),
           Visibility(
               visible: showButton,
               child: CustomButton(label: "Nova Partida", onPress: onRestart)),
