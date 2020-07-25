@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'custom_button.dart';
+import 'CustomButton.dart';
 
 class FormRow extends StatelessWidget {
+  bool disableButton;
+  var myController;
+  final Function onSubmit;
+
   FormRow(
       {@required this.myController,
       this.disableButton,
       @required this.onSubmit});
-
-  bool disableButton;
-  var myController;
-  final Function onSubmit;
 
   @override
   Widget build(BuildContext context) {

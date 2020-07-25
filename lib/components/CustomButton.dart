@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  CustomButton(
-      {@required this.label, this.disabled = false, @required this.onPress});
-
-  bool disabled;
   String label;
   final Function onPress;
+  bool disabled;
+
+  CustomButton(
+      {@required this.label, @required this.onPress, this.disabled = false});
 
   @override
   Widget build(BuildContext context) {

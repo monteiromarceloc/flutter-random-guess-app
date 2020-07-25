@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_random_guess_app/custom_segment_display.dart';
-import 'custom_button.dart';
+import 'CustomSegmentDisplay.dart';
+import 'CustomButton.dart';
 
 class DisplayContainer extends StatelessWidget {
   String label;
