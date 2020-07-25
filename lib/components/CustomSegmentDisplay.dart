@@ -8,6 +8,7 @@ class CustomSegmentDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Separates value's digits
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       if (displayValue > 99) SingleDisplay(value: (displayValue ~/ 100)),
       if (displayValue > 9) SingleDisplay(value: ((displayValue % 100) ~/ 10)),
@@ -17,7 +18,11 @@ class CustomSegmentDisplay extends StatelessWidget {
 }
 
 class SingleDisplay extends StatelessWidget {
+  final value;
+  var LEDMap;
+
   SingleDisplay({@required this.value}) {
+    // Map which segments should be turned on of or off
     this.LEDMap = {
       'A': [2, 3, 5, 6, 7, 8, 9, 0].contains(this.value),
       'B': [2, 3, 4, 5, 6, 8, 9].contains(this.value),
@@ -28,9 +33,6 @@ class SingleDisplay extends StatelessWidget {
       'G': [1, 3, 4, 5, 6, 7, 8, 9, 0].contains(this.value),
     };
   }
-
-  final value;
-  var LEDMap;
 
   @override
   Widget build(BuildContext context) {

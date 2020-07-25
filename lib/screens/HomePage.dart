@@ -15,19 +15,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _inputText = '0';
+  int _displayValue = 0;
   int _randomNumber = 0;
-  String _textToDisplay = '';
+  String _messageText = '';
   bool _showPlayAgainButton = false;
   bool _isLoading = true;
 
   final myController = TextEditingController();
   final randomNumberRepository = new RandomNumberRepository();
 
+  //
   Future<void> _fetchRandomNumber() async {
     setState(() {
       _isLoading = true;
     });
+
     try {
       NumberResponse res = await randomNumberRepository.getValue();
       int value = res.value;
@@ -36,8 +38,8 @@ class _HomePageState extends State<HomePage> {
       });
     } on CustomException catch (error) {
       setState(() {
-        _inputText = error.StatusCode.toString();
-        _textToDisplay = error.ErrorMessage;
+        _displayValue = error.StatusCode;
+        _messageText = error.ErrorMessage;
         _showPlayAgainButton = true;
       });
     } finally {
@@ -73,13 +75,13 @@ class _HomePageState extends State<HomePage> {
               _isLoading
                   ? LoadingComponent()
                   : DisplayContainer(
-                      label: _textToDisplay,
-                      displayText: _inputText,
+                      label: _messageText,
+                      displayValue: _displayValue,
                       showButton: _showPlayAgainButton,
                       onRestart: () {
                         setState(() {
-                          _inputText = '0';
-                          _textToDisplay = '';
+                          _displayValue = 0;
+                          _messageText = '';
                           _showPlayAgainButton = false;
                         });
                         _fetchRandomNumber();
@@ -91,8 +93,8 @@ class _HomePageState extends State<HomePage> {
                   int inputNumber = int.parse(myController.text);
                   bool didHit = inputNumber == _randomNumber;
                   setState(() {
-                    _inputText = myController.text;
-                    _textToDisplay = didHit
+                    _displayValue = inputNumber;
+                    _messageText = didHit
                         ? "Acertou!"
                         : inputNumber < _randomNumber ? "É maior" : "É menor";
                     _showPlayAgainButton = didHit;

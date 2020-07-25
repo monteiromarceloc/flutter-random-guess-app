@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'CustomButton.dart';
 
 class FormRow extends StatelessWidget {
@@ -19,6 +19,9 @@ class FormRow extends StatelessWidget {
         Expanded(
           child: TextField(
             controller: myController,
+            inputFormatters: [
+              new WhitelistingTextInputFormatter(RegExp("[0-9]"))
+            ],
             decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey, width: 2.0)),

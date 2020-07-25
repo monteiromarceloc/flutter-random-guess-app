@@ -5,13 +5,13 @@ import 'CustomButton.dart';
 
 class DisplayContainer extends StatelessWidget {
   String label;
-  String displayText;
+  int displayValue;
   bool showButton;
   final Function onRestart;
 
   DisplayContainer(
       {@required this.label,
-      @required this.displayText,
+      @required this.displayValue,
       @required this.showButton,
       @required this.onRestart});
 
@@ -27,7 +27,7 @@ class DisplayContainer extends StatelessWidget {
                 label,
                 style: Theme.of(context).textTheme.headline6,
               )),
-          CustomSegmentDisplay(displayValue: int.parse(displayText)),
+          CustomSegmentDisplay(displayValue: displayValue),
           Visibility(
               visible: showButton,
               child: CustomButton(label: "Nova Partida", onPress: onRestart)),
