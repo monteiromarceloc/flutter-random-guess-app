@@ -1,17 +1,15 @@
 # Flutter Random Guess App - Qual é o número?
 
-Este projeto foi desenvolvido Flutter, framework de UI desenvolvido pelo Google, e utiliza a linguagem Dart.
+Este projeto foi desenvolvido em Flutter, framework de UI desenvolvido pelo Google, e utiliza linguagem de programação Dart.
 O app possui apenas uma tela onde o jogador deverá tentar descobrir o número sorteado, inserindo seu palpite no campo de texto e clicando em enviar. O app dirá se o palpite foi maior ou menor que o número sorteado até que o jogador acerte.
 
 ## Executando o projeto
 
 Com um dispositivo ou emulador conectados, rode os seguintes comandos na raiz do projeto:
-
 ```
 flutter pub get
 flutter run
 ```
-
 ## Detalhes de implementação
 
 Para possibilitar a reutilização de widgets, serviços e outras classes o diretório `lib` foi estruturado da seguinte forma:
@@ -39,21 +37,21 @@ Por fim, o **`CustomSegmentDisplay`** foi desenvolvido da seguinte forma:
 
 2. O **`SingleDisplay`** recebe o algarismo e cria um **`ledMap`**, indicando quais segmentos devem acender para que o número seja exibido e envia-o para um **`DisplayPainter`**.
 
-3. Este usa a função paint do **`CustomPainter`** para criar retângulos com os devidos tamanhos e posições*, para formar um display de sete segmentos. Inicialmente, pinta-se o fundo de todos os retângulos e, posteriormente, de vermelho aqueles de devem estar ligados.
+3. Este usa a função paint do **`CustomPainter`** para criar retângulos com os devidos tamanhos e posições(*), para formar um display de sete segmentos. Inicialmente, pinta-se o fundo de todos os retângulos e, posteriormente, de vermelho aqueles de devem estar ligados.
 
-* Os tamanhos e posições inicialmente foram implementados de forma estática, como abaixo:
+(*) Os tamanhos e posições inicialmente foram implementados de forma estática, como abaixo:
 ```
-canvas.drawRect(Offset(0, 0) & Size(60, 10), paintOff);
-canvas.drawRect(Offset(0, 55) & Size(60, 10), paintOff);
-...
+canvas.drawRect(Offset(10, 0) & Size(40, 10), paintOff);
+canvas.drawRect(Offset(10, 55) & Size(40, 10), paintOff);
+// ...
 ```
-No entanto, ao implementar a alteração dinâmica do tamanho e cores, foram utilizadas as variáveis: *hSize*, *vSize*, *aOffset*, *bOffset*, *cOffset* etc. Estas variáveis são calculadas a partir de um *size*, proveniente do **`GlobalState`**: trata-se de um **`StatefulWidget`** que armazena *size* e *color*, utilizando um **`InheritedWidget`**, tornando assim possível acessar e manipular o estado de forma global. A utilização das variáveis para Size e Offset não era necessária, em especial aOffset e dOffset pois são sempre Offset(0, 0), e nem fOffset pois este é igual a bOffset. No entanto, optei por criá-las apenas para tornar o código mais legível.
+No entanto, ao implementar a alteração dinâmica do tamanho e cores, foram utilizadas as variáveis: *hSize*, *vSize*, *aOffset*, *bOffset*, *cOffset* etc. Estas variáveis são calculadas a partir de um *size*, proveniente do **`GlobalState`**: trata-se de um **`StatefulWidget`** que armazena *size* e *color*, utilizando um **`InheritedWidget`**, tornando assim possível acessar e manipular o estado de forma global.
 
 Essas e outras estratégias de implementação e design patterns adotados visam organização, coesão, robustez, flexibilidade e escalabilidade do código. Vale ressaltar também que o projeto foi desenvolvido tendo multiplas fontes de informação como referência e deixo listadas abaixo algumas delas:
 
-https://flutter.dev/docs/
-https://api.flutter.dev/flutter/dart-ui/dart-ui-library.html
-https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
-https://itnext.io/flutter-handling-your-network-api-calls-like-a-boss-936eef296547
-https://stackoverflow.com/questions/53019061/how-to-implement-a-custom-dialog-box-in-flutter
-https://stackoverflow.com/questions/49491860/flutter-how-to-correctly-use-an-inherited-widget/49492495
+- https://flutter.dev/docs/
+- https://api.flutter.dev/flutter/dart-ui/dart-ui-library.html
+- https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
+- https://itnext.io/flutter-handling-your-network-api-calls-like-a-boss-936eef296547
+- https://stackoverflow.com/questions/53019061/how-to-implement-a-custom-dialog-box-in-flutter
+- https://stackoverflow.com/questions/49491860/flutter-how-to-correctly-use-an-inherited-widget/49492495

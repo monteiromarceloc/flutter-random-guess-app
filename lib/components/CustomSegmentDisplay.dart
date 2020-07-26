@@ -44,7 +44,7 @@ class SingleDisplay extends StatelessWidget {
     return Container(
       width: 6 * dSize,
       height: 12 * dSize,
-      margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+      margin: EdgeInsets.fromLTRB(7.0, 0, 7.0, 0),
       child: CustomPaint(
         painter: DisplayPainter(
           ledMap: ledMap,
