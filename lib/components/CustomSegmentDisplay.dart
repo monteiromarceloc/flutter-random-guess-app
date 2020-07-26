@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'package:flutter_random_guess_app/theme/AppTheme.dart';
+import 'package:flutter_random_guess_app/store/GlobalState.dart';
 
 class CustomSegmentDisplay extends StatelessWidget {
   int displayValue;
@@ -38,8 +38,8 @@ class SingleDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = AppTheme.of(context).color;
-    final dSize = AppTheme.of(context).size;
+    final color = GlobalState.of(context).color;
+    final dSize = GlobalState.of(context).size;
 
     return Container(
       width: 6 * dSize,

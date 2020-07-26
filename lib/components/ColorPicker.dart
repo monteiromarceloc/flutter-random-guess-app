@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:flutter_random_guess_app/theme/AppTheme.dart';
+import 'package:flutter_random_guess_app/store/GlobalState.dart';
 
 class ColorPicker extends StatelessWidget {
   ColorPicker();
@@ -13,8 +13,8 @@ class ColorPicker extends StatelessWidget {
         height: 240,
         child: Material(
             child: MaterialColorPicker(
-          onColorChange: AppTheme.of(context).onColorChange,
-          selectedColor: AppTheme.of(context).color,
+          onColorChange: GlobalState.of(context).onColorChange,
+          selectedColor: GlobalState.of(context).color,
         )),
         margin: EdgeInsets.only(top: 100, left: 12, right: 12),
         decoration: BoxDecoration(

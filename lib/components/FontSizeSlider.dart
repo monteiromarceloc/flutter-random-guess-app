@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_random_guess_app/theme/AppTheme.dart';
+import 'package:flutter_random_guess_app/store/GlobalState.dart';
 
 class FontSizeSlider extends StatelessWidget {
   FontSizeSlider();
@@ -14,8 +14,8 @@ class FontSizeSlider extends StatelessWidget {
             child: Slider(
           min: 5.0,
           max: 10.0,
-          value: AppTheme.of(context).size,
-          onChanged: AppTheme.of(context).onSizeChange,
+          value: GlobalState.of(context).size,
+          onChanged: GlobalState.of(context).onSizeChange,
         )),
         margin: EdgeInsets.only(top: 100, left: 12, right: 12),
         decoration: BoxDecoration(

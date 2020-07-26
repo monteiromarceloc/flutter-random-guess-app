@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_random_guess_app/theme/AppTheme.dart';
+import 'package:flutter_random_guess_app/store/GlobalState.dart';
 import 'package:flutter_random_guess_app/screens/HomePage.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
 
-    return AppTheme(
+    return GlobalState(
         child: MaterialApp(
       title: 'Qual é o número?',
       theme: ThemeData(

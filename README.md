@@ -25,7 +25,7 @@ lib
 main.dart
 ```
 
-O arquivo **`main.dart`** aplica a estilização através do InheritedWidget **`AppTheme`** e da classe **`ThemeData`**, e também renderiza a página **`HomePage`**. Essa, por sua vez, renderiza os componentes **`DisplayContainer`** e **`FormRow`**, respectivamentes responsáveis por o palpite do usuário junto à resposta do sistema e receber o input do usuário. A HomePage é um **`StatefulWidget`** que armazena os principais dados da aplicação. Por meio da função assíncrona **`_fetchRandomNumber`**, que é chamada ao iniciar do componente, obtém-se da API um **`NumberResponse`** cuja propriedade **`value`** é salva na variável de estado **`_randomNumber`**.
+O arquivo **`main.dart`** aplica a estilização, propriedades do layout, o estado global **`GlobalState`** e renderiza a página **`HomePage`**. Essa, por sua vez, renderiza os componentes **`DisplayContainer`** e **`FormRow`**, respectivamentes responsáveis por o palpite do usuário junto à resposta do sistema e receber o input do usuário. A HomePage é um **`StatefulWidget`** que armazena os principais dados da aplicação. Por meio da função assíncrona **`_fetchRandomNumber`**, que é chamada ao iniciar do componente, obtém-se da API um **`NumberResponse`** cuja propriedade **`value`** é salva na variável de estado **`_randomNumber`**.
 
 As chamadas à API são feitas pelo **`randomNumberRepository`** que por sua vez chama o **`ApiProvider`**. Esse processo é envolvido por blocos try-catch de modo que eventuais erros sejam tratados. Tanto erros enviados pela API, como falhar de internet e outros enviam a exceção **`CustomException`** que armazena o **`StatusCode`** e a mensagem de erro, para serem exibidos na HomePage.
 
@@ -47,7 +47,7 @@ canvas.drawRect(Offset(0, 0) & Size(60, 10), paintOff);
 canvas.drawRect(Offset(0, 55) & Size(60, 10), paintOff);
 ...
 ```
-No entanto, ao implementar a alteração dinâmica do tamanho e cores, foram utilizadas as variáveis: *hSize*, *vSize*, *aOffset*, *bOffset*, *cOffset* etc. Estas variáveis são calculadas a partir de um **`size`**, proveniente do InheritedWidget **`AppTheme`** (que por ser imutável, utiliza um **`ThemeRepository`** para armazenar *size* e *color*). A utilização das variáveis de Size e Offset não era necessária, em especial aOffset e dOffset pois são sempre Offset(0, 0), e nem fOffset pois este é igual a bOffset. No entanto, optei por criá-las apenas para tornar o código mais legível.
+No entanto, ao implementar a alteração dinâmica do tamanho e cores, foram utilizadas as variáveis: *hSize*, *vSize*, *aOffset*, *bOffset*, *cOffset* etc. Estas variáveis são calculadas a partir de um *size*, proveniente do **`GlobalState`**: trata-se de um **`StatefulWidget`** que armazena *size* e *color*, utilizando um **`InheritedWidget`**, tornando assim possível acessar e manipular o estado de forma global. A utilização das variáveis para Size e Offset não era necessária, em especial aOffset e dOffset pois são sempre Offset(0, 0), e nem fOffset pois este é igual a bOffset. No entanto, optei por criá-las apenas para tornar o código mais legível.
 
 Essas e outras estratégias de implementação e design patterns adotados visam organização, coesão, robustez, flexibilidade e escalabilidade do código. Vale ressaltar também que o projeto foi desenvolvido tendo multiplas fontes de informação como referência e deixo listadas abaixo algumas delas:
 

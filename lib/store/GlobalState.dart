@@ -1,19 +1,19 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
-class AppTheme extends StatefulWidget {
-  static AppThemeData of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<AppThemeData>();
+class GlobalState extends StatefulWidget {
+  static GlobalStateData of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<GlobalStateData>();
 
-  const AppTheme({Key key, this.child}) : super(key: key);
+  const GlobalState({Key key, this.child}) : super(key: key);
 
   final Widget child;
 
   @override
-  _AppThemeState createState() => _AppThemeState();
+  _GlobalStateState createState() => _GlobalStateState();
 }
 
-class _AppThemeState extends State<AppTheme> {
+class _GlobalStateState extends State<GlobalState> {
   double size = 10.0;
   Color color = Colors.red;
 
@@ -31,7 +31,7 @@ class _AppThemeState extends State<AppTheme> {
 
   @override
   Widget build(BuildContext context) {
-    return AppThemeData(
+    return GlobalStateData(
       size: size,
       color: color,
       onSizeChange: onSizeChange,
@@ -41,13 +41,13 @@ class _AppThemeState extends State<AppTheme> {
   }
 }
 
-class AppThemeData extends InheritedWidget {
+class GlobalStateData extends InheritedWidget {
   final double size;
   final Color color;
   final ValueChanged<double> onSizeChange;
   final ValueChanged<Color> onColorChange;
 
-  AppThemeData({
+  GlobalStateData({
     Key key,
     this.size,
     this.color,
@@ -56,12 +56,12 @@ class AppThemeData extends InheritedWidget {
     Widget child,
   }) : super(key: key, child: child);
 
-  static AppThemeData of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AppThemeData>();
+  static GlobalStateData of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<GlobalStateData>();
   }
 
   @override
-  bool updateShouldNotify(AppThemeData oldWidget) =>
+  bool updateShouldNotify(GlobalStateData oldWidget) =>
       oldWidget.size != size ||
       oldWidget.onSizeChange != onSizeChange ||
       oldWidget.color != color ||
