@@ -38,8 +38,8 @@ class SingleDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = AppTheme.of(context).theme.color;
-    final dSize = AppTheme.of(context).theme.size;
+    final color = AppTheme.of(context).color;
+    final dSize = AppTheme.of(context).size;
 
     return Container(
       width: 6 * dSize,

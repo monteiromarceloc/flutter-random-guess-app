@@ -55,4 +55,5 @@ https://flutter.dev/docs/
 https://api.flutter.dev/flutter/dart-ui/dart-ui-library.html
 https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
 https://itnext.io/flutter-handling-your-network-api-calls-like-a-boss-936eef296547
-https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html
+https://stackoverflow.com/questions/53019061/how-to-implement-a-custom-dialog-box-in-flutter
+https://stackoverflow.com/questions/49491860/flutter-how-to-correctly-use-an-inherited-widget/49492495

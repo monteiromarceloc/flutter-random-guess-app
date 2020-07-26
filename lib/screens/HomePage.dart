@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_random_guess_app/components/AppBarActions.dart';
 
 import 'package:flutter_random_guess_app/repositories/RandomNumberRepository.dart';
 import 'package:flutter_random_guess_app/models/NumberResponse.dart';
@@ -7,8 +8,7 @@ import 'package:flutter_random_guess_app/components/DisplayContainer.dart';
 import 'package:flutter_random_guess_app/components/FormRow.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  HomePage({Key key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -63,9 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
+        appBar: AppBar(title: Text("Qual é o número"), actions: AppBarActions),
         body: Container(
           margin: EdgeInsets.all(20.0),
           child: Column(
@@ -98,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   });
                   myController.clear();
                 },
-              )
+              ),
             ],
           ),
         ));
