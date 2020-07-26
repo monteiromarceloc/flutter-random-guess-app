@@ -44,7 +44,7 @@ class SingleDisplay extends StatelessWidget {
     return Container(
       width: 6 * dSize,
       height: 12 * dSize,
-      margin: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
+      margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
       child: CustomPaint(
         painter: DisplayPainter(
           ledMap: ledMap,
@@ -72,15 +72,15 @@ class DisplayPainter extends CustomPainter {
       ..color = Colors.grey[200]
       ..style = PaintingStyle.fill;
 
-    final hSize = Size(6 * dSize, dSize);
-    final vSize = Size(dSize, 6 * dSize);
-    final aOffset = Offset(0, 0);
-    final bOffset = Offset(0, 5.5 * dSize);
-    final cOffset = Offset(0, 11 * dSize);
-    final dOffset = aOffset;
-    final eOffset = Offset(5 * dSize, 0);
-    final fOffset = bOffset;
-    final gOffset = Offset(5 * dSize, 5.5 * dSize);
+    final hSize = Size(4 * dSize, dSize);
+    final vSize = Size(dSize, 4 * dSize);
+    final aOffset = Offset(dSize, 0);
+    final bOffset = Offset(dSize, 5.5 * dSize);
+    final cOffset = Offset(dSize, 11 * dSize);
+    final dOffset = Offset(0, 1.25 * dSize);
+    final eOffset = Offset(5 * dSize, 1.25 * dSize);
+    final fOffset = Offset(0, 6.75 * dSize);
+    final gOffset = Offset(5 * dSize, 6.75 * dSize);
 
     // Build background
     canvas.drawRect(aOffset & hSize, paintOff);
