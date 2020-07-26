@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'package:flutter_random_guess_app/theme/AppTheme.dart';
+
 class CustomSegmentDisplay extends StatelessWidget {
   int displayValue;
 
@@ -19,11 +21,11 @@ class CustomSegmentDisplay extends StatelessWidget {
 
 class SingleDisplay extends StatelessWidget {
   final value;
-  var LEDMap;
+  var ledMap;
 
   SingleDisplay({@required this.value}) {
     // Map which segments should be turned on of or off
-    this.LEDMap = {
+    this.ledMap = {
       'A': [2, 3, 5, 6, 7, 8, 9, 0].contains(this.value),
       'B': [2, 3, 4, 5, 6, 8, 9].contains(this.value),
       'C': [2, 3, 5, 6, 8, 0].contains(this.value),
@@ -36,52 +38,72 @@ class SingleDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = AppTheme.of(context).theme.color;
+    final dSize = AppTheme.of(context).theme.size;
+
     return Container(
-      width: 60,
-      height: 120,
+      width: 6 * dSize,
+      height: 12 * dSize,
       margin: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
       child: CustomPaint(
-        painter: DisplayPainter(LEDMap: LEDMap),
+        painter: DisplayPainter(
+          ledMap: ledMap,
+          color: color,
+          dSize: dSize,
+        ),
       ),
     );
   }
 }
 
 class DisplayPainter extends CustomPainter {
-  DisplayPainter({@required this.LEDMap});
+  DisplayPainter({@required this.ledMap, this.color, this.dSize});
 
-  final LEDMap;
+  final ledMap;
+  final color;
+  double dSize;
 
   @override
   void paint(Canvas canvas, Size size) {
     var paintOn = Paint()
-      ..color = Colors.red
+      ..color = color
       ..style = PaintingStyle.fill;
     var paintOff = Paint()
       ..color = Colors.grey[200]
       ..style = PaintingStyle.fill;
 
+    final hSize = Size(6 * dSize, dSize);
+    final vSize = Size(dSize, 6 * dSize);
+    final aOffset = Offset(0, 0);
+    final bOffset = Offset(0, 5.5 * dSize);
+    final cOffset = Offset(0, 11 * dSize);
+    final dOffset = aOffset;
+    final eOffset = Offset(5 * dSize, 0);
+    final fOffset = bOffset;
+    final gOffset = Offset(5 * dSize, 5.5 * dSize);
+
     // Build background
-    canvas.drawRect(Offset(0, 0) & Size(60, 10), paintOff);
-    canvas.drawRect(Offset(0, 55) & Size(60, 10), paintOff);
-    canvas.drawRect(Offset(0, 110) & Size(60, 10), paintOff);
-    canvas.drawRect(Offset(0, 0) & Size(10, 60), paintOff);
-    canvas.drawRect(Offset(50, 0) & Size(10, 60), paintOff);
-    canvas.drawRect(Offset(0, 55) & Size(10, 60), paintOff);
-    canvas.drawRect(Offset(50, 55) & Size(10, 60), paintOff);
+    canvas.drawRect(aOffset & hSize, paintOff);
+    canvas.drawRect(bOffset & hSize, paintOff);
+    canvas.drawRect(cOffset & hSize, paintOff);
+    canvas.drawRect(dOffset & vSize, paintOff);
+    canvas.drawRect(eOffset & vSize, paintOff);
+    canvas.drawRect(fOffset & vSize, paintOff);
+    canvas.drawRect(gOffset & vSize, paintOff);
 
     // Paint colors
-    if (LEDMap['A']) canvas.drawRect(Offset(0, 0) & Size(60, 10), paintOn);
-    if (LEDMap['B']) canvas.drawRect(Offset(0, 55) & Size(60, 10), paintOn);
-    if (LEDMap['C']) canvas.drawRect(Offset(0, 110) & Size(60, 10), paintOn);
-    if (LEDMap['D']) canvas.drawRect(Offset(0, 0) & Size(10, 60), paintOn);
-    if (LEDMap['E']) canvas.drawRect(Offset(50, 0) & Size(10, 60), paintOn);
-    if (LEDMap['F']) canvas.drawRect(Offset(0, 55) & Size(10, 60), paintOn);
-    if (LEDMap['G']) canvas.drawRect(Offset(50, 55) & Size(10, 60), paintOn);
+    if (ledMap['A']) canvas.drawRect(aOffset & hSize, paintOn);
+    if (ledMap['B']) canvas.drawRect(bOffset & hSize, paintOn);
+    if (ledMap['C']) canvas.drawRect(cOffset & hSize, paintOn);
+    if (ledMap['D']) canvas.drawRect(dOffset & vSize, paintOn);
+    if (ledMap['E']) canvas.drawRect(eOffset & vSize, paintOn);
+    if (ledMap['F']) canvas.drawRect(fOffset & vSize, paintOn);
+    if (ledMap['G']) canvas.drawRect(gOffset & vSize, paintOn);
   }
 
   @override
-  bool shouldRepaint(DisplayPainter old) => old.LEDMap != LEDMap;
+  bool shouldRepaint(DisplayPainter old) =>
+      (old.ledMap != ledMap || old.color != color || old.dSize != dSize);
 }
 
 // TODO: use drawPath to create hexagonal shape

@@ -25,7 +25,7 @@ lib
 main.dart
 ```
 
-O arquivo **`main.dart`** aplica a estilização, propriedades do layout e renderiza a página **`HomePage`**. Essa, por sua vez, renderiza os componentes **`DisplayContainer`** e **`FormRow`**, respectivamentes responsáveis por o palpite do usuário junto à resposta do sistema e receber o input do usuário. A HomePage é um **`StatefulWidget`** que armazena os principais dados da aplicação. Por meio da função assíncrona **`_fetchRandomNumber`**, que é chamada ao iniciar do componente, obtém-se da API um **`NumberResponse`** cuja propriedade **`value`** é salva na variável de estado **`_randomNumber`**.
+O arquivo **`main.dart`** aplica a estilização através do InheritedWidget **`AppTheme`** e da classe **`ThemeData`**, e também renderiza a página **`HomePage`**. Essa, por sua vez, renderiza os componentes **`DisplayContainer`** e **`FormRow`**, respectivamentes responsáveis por o palpite do usuário junto à resposta do sistema e receber o input do usuário. A HomePage é um **`StatefulWidget`** que armazena os principais dados da aplicação. Por meio da função assíncrona **`_fetchRandomNumber`**, que é chamada ao iniciar do componente, obtém-se da API um **`NumberResponse`** cuja propriedade **`value`** é salva na variável de estado **`_randomNumber`**.
 
 As chamadas à API são feitas pelo **`randomNumberRepository`** que por sua vez chama o **`ApiProvider`**. Esse processo é envolvido por blocos try-catch de modo que eventuais erros sejam tratados. Tanto erros enviados pela API, como falhar de internet e outros enviam a exceção **`CustomException`** que armazena o **`StatusCode`** e a mensagem de erro, para serem exibidos na HomePage.
 
@@ -37,9 +37,22 @@ Por fim, o **`CustomSegmentDisplay`** foi desenvolvido da seguinte forma:
 
 1. Receber um valor inteiro e separa as unidades, dezenas e centenas, passando-as cada uma para um **`SingleDisplay`** organizados em linha.
 
-2. O **`SingleDisplay`** recebe o algarismo e cria um **`LEDMap`**, indicando quais segmentos devem acender para que o número seja exibido e envia-o para um **`DisplayPainter`**.
+2. O **`SingleDisplay`** recebe o algarismo e cria um **`ledMap`**, indicando quais segmentos devem acender para que o número seja exibido e envia-o para um **`DisplayPainter`**.
 
-3. Este usa a função paint do **`CustomPainter`** para criar retângulos com os devidos tamanhos e posições, para formar um display de sete segmentos. Inicialmente, pinta-se o fundo de todos os retângulos e, posteriormente, de vermelho aqueles de devem estar ligados.
+3. Este usa a função paint do **`CustomPainter`** para criar retângulos com os devidos tamanhos e posições*, para formar um display de sete segmentos. Inicialmente, pinta-se o fundo de todos os retângulos e, posteriormente, de vermelho aqueles de devem estar ligados.
 
+* Os tamanhos e posições inicialmente foram implementados de forma estática, como abaixo:
+```
+canvas.drawRect(Offset(0, 0) & Size(60, 10), paintOff);
+canvas.drawRect(Offset(0, 55) & Size(60, 10), paintOff);
+...
+```
+No entanto, ao implementar a alteração dinâmica do tamanho e cores, foram utilizadas as variáveis: *hSize*, *vSize*, *aOffset*, *bOffset*, *cOffset* etc. Estas variáveis são calculadas a partir de um **`size`**, proveniente do InheritedWidget **`AppTheme`** (que por ser imutável, utiliza um **`ThemeRepository`** para armazenar *size* e *color*). A utilização das variáveis de Size e Offset não era necessária, em especial aOffset e dOffset pois são sempre Offset(0, 0), e nem fOffset pois este é igual a bOffset. No entanto, optei por criá-las apenas para tornar o código mais legível.
 
-As estratégias de implementação e design patterns adotados visam organização, coesão, robustez, flexibilidade e escalabilidade do código.
+Essas e outras estratégias de implementação e design patterns adotados visam organização, coesão, robustez, flexibilidade e escalabilidade do código. Vale ressaltar também que o projeto foi desenvolvido tendo multiplas fontes de informação como referência e deixo listadas abaixo algumas delas:
+
+https://flutter.dev/docs/
+https://api.flutter.dev/flutter/dart-ui/dart-ui-library.html
+https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
+https://itnext.io/flutter-handling-your-network-api-calls-like-a-boss-936eef296547
+https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html

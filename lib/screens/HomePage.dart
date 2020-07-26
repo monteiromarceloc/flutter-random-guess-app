@@ -5,7 +5,6 @@ import 'package:flutter_random_guess_app/models/NumberResponse.dart';
 import 'package:flutter_random_guess_app/models/CustomException.dart';
 import 'package:flutter_random_guess_app/components/DisplayContainer.dart';
 import 'package:flutter_random_guess_app/components/FormRow.dart';
-import 'package:flutter_random_guess_app/components/LoadingComponent.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -72,20 +71,18 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _isLoading
-                  ? LoadingComponent()
-                  : DisplayContainer(
-                      label: _messageText,
-                      displayValue: _displayValue,
-                      showButton: _showPlayAgainButton,
-                      onRestart: () {
-                        setState(() {
-                          _displayValue = 0;
-                          _messageText = '';
-                          _showPlayAgainButton = false;
-                        });
-                        _fetchRandomNumber();
-                      }),
+              DisplayContainer(
+                  label: _messageText,
+                  displayValue: _displayValue,
+                  showButton: _showPlayAgainButton,
+                  onRestart: () {
+                    setState(() {
+                      _displayValue = 0;
+                      _messageText = '';
+                      _showPlayAgainButton = false;
+                    });
+                    _fetchRandomNumber();
+                  }),
               FormRow(
                 myController: myController,
                 disableButton: _showPlayAgainButton || _isLoading,
