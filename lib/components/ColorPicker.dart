@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_random_guess_app/theme/AppTheme.dart';
 
-class FontSizeSlider extends StatelessWidget {
-  FontSizeSlider();
+class ColorPicker extends StatelessWidget {
+  ColorPicker();
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        height: 80,
+        height: 240,
         child: Material(
-            child: Slider(
-          min: 5.0,
-          max: 10.0,
-          value: AppTheme.of(context).size,
-          onChanged: AppTheme.of(context).onSizeChange,
+            child: MaterialColorPicker(
+          onColorChange: AppTheme.of(context).onColorChange,
+          selectedColor: AppTheme.of(context).color,
         )),
         margin: EdgeInsets.only(top: 100, left: 12, right: 12),
         decoration: BoxDecoration(
